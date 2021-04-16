@@ -1,0 +1,20 @@
+{
+	"name": "vendorname/twitterclone",
+	"require": {
+		"php": ">= 7.0",
+		"ext-pdo": "*"
+	},
+	"authors": [
+		{
+			"name": "Rafael",
+			"email": "rafael@teste.com.br"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"App\\": "App/",
+			"MF\\": "vendor/MF/"
+		}
+	},
+	"description": "projeto realizado para teste do miniframework."
+}
