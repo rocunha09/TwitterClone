@@ -6,7 +6,7 @@ namespace App;
 
 class Connection{
     private static $host = 'localhost';
-    private static $db = 'MF';
+    private static $db = 'twitter';
     private static $username = 'root';
     private static $password = '';
 
