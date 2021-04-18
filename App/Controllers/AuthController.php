@@ -15,7 +15,7 @@ class AuthController extends Action {
     public function autenticar(){
         $usuario = Container::getModel('Usuario');
         $usuario->__set('email', $_POST['email']);
-        $usuario->__set('senha', $_POST['senha']);
+        $usuario->__set('senha', md5($_POST['senha'])); //convertido para o hash de md5 para que a comparação com o que foi armazenado no banco funcione (ver IndexController)
               
         echo '<pre>';
         print_r($usuario);

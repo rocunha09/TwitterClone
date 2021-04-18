@@ -33,7 +33,7 @@ class IndexController extends Action {
         $usuario = Container::getModel('Usuario');
         $usuario->__set('nome', $_POST['nome']);
         $usuario->__set('email', $_POST['email']);
-        $usuario->__set('senha', $_POST['senha']);
+        $usuario->__set('senha', md5($_POST['senha'])); //md5 utilizado para exemplificar a necessidade de cryptografia de senha para segurança de acesso.
 
         if($usuario->validarCadastro() && count($usuario->consultarExistente()) == 0){
             $usuario->salvar();
