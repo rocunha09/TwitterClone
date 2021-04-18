@@ -48,7 +48,7 @@ class Usuario extends Model {
     public function validarCadastro(){
 
         //validação vazia apenas para conceituar este tipo de funcionalidade.
-        if(strlen($this->__get('nome')) < 3 || strlen($this->__get('email')) < 3 || strlen($this->__get('senha')) < 3){
+        if(strlen($this->__get('nome')) < 3 || strlen($this->__get('email')) < 3){
 
             return false;
         }
