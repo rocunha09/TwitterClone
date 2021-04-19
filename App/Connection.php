@@ -9,7 +9,7 @@ class Connection{
     private static $db = 'twitter';
     private static $username = 'root';
     private static $password = '';
-    private static $port = '3307';
+    private static $port = '3306';
 
     public static function getDb(){
         try {
