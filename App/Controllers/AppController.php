@@ -55,5 +55,28 @@ class AppController extends Action {
 
     }
 
+    public function quemSeguir(){
+        $this->validaAutenticacao();
+
+        $procurado = isset($_GET['termo']) ? $_GET['termo'] : '';
+        $usuario = Container::getModel('usuario');
+        $usuariosEncontrados = array();
+
+        if($procurado != ''){
+            $usuario->__set('nome', $procurado);
+            $usuariosEncontrados = $usuario->procurarPor();
+
+            $this->view->usuariosEncontrados = $usuariosEncontrados;
+
+        } else {
+            $usuariosEncontrados = $usuario->listarTodos();
+
+            $this->view->usuariosEncontrados = $usuariosEncontrados;
+        }
+
+        $this->render('quemSeguir');
+
+    }
+
 }
 ?>
