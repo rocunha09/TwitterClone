@@ -21,3 +21,12 @@ create table tweets(
                        tweet varchar(140) not null,
                        data datetime default current_timestamp
 );
+
+
+//criação de tabela para relação de seguidores
+
+create table usuarios_seguidores(
+            id int not null primary key auto_increment,
+            id_usuario int not null,
+            id_usuario_seguindo int not null
+);

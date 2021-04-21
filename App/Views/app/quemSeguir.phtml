@@ -73,9 +73,7 @@
 					</div>
 				</div>
 			</div>
-            <?php  foreach($this->view->usuariosEncontrados as $indice => $usuario) {
-                    if($usuario['nome'] != $_SESSION['nome']){
-                ?>
+            <?php  foreach($this->view->usuariosEncontrados as $indice => $usuario) { ?>
 			<div class="row mb-2">
 				<div class="col">
 					<div class="card">
@@ -87,16 +85,20 @@
 
 								<div class="col-md-6 d-flex justify-content-end">
 									<div>
-										<a href="#" class="btn btn-success">Seguir</a>
-										<a href="#" class="btn btn-danger">Deixar de seguir</a>
-									</div>
+                                        <?php if($usuario['seguindo'] == 0){ ?>
+										<a href="/acao?acao=seguir&id=<?= $usuario['id'] ?>" class="btn btn-success">Seguir</a>
+										<?php  } ?>
+                                        <?php if($usuario['seguindo'] != 0){ ?>
+                                        <a href="/acao?acao=deixar_de_seguir&id=<?= $usuario['id'] ?>" class="btn btn-danger">Deixar de seguir</a>
+                                        <?php  } ?>
+                                    </div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-            <?php }  }  ?>
+            <?php }  ?>
 		</div>
 	</div>
 </div>

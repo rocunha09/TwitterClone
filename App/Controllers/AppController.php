@@ -60,22 +60,51 @@ class AppController extends Action {
 
         $procurado = isset($_GET['termo']) ? $_GET['termo'] : '';
         $usuario = Container::getModel('usuario');
+
         $usuariosEncontrados = array();
+        $usuario->__set('nome', $procurado);
+        $usuario->__set('id', $_SESSION['id']);
 
         if($procurado != ''){
-            $usuario->__set('nome', $procurado);
             $usuariosEncontrados = $usuario->procurarPor();
-
-            $this->view->usuariosEncontrados = $usuariosEncontrados;
 
         } else {
             $usuariosEncontrados = $usuario->listarTodos();
 
-            $this->view->usuariosEncontrados = $usuariosEncontrados;
         }
+
+        $this->view->usuariosEncontrados = $usuariosEncontrados;
 
         $this->render('quemSeguir');
 
+    }
+
+    public function acao(){
+        $this->validaAutenticacao();
+
+        $acao = isset($_GET['acao']) ? $_GET['acao'] : '';
+        $id_usuario_seguindo = isset($_GET['id']) ? $_GET['id'] : '';
+
+        $usuario = Container::getModel('usuario');
+        $usuario->__set('id', $_SESSION['id']);
+
+        if($acao == 'seguir'){
+            if($usuario->seguindo($id_usuario_seguindo) == 0){
+                $usuario->seguir($id_usuario_seguindo);
+
+            }
+
+        }
+
+        if($acao == "deixar_de_seguir"){
+            if($usuario->seguindo($id_usuario_seguindo) == 1){
+                $usuario->deixarDeSeguir($id_usuario_seguindo);
+
+            }
+
+        }
+
+        header('Location: /quem_seguir');
     }
 
 }

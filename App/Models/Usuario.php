@@ -74,9 +74,10 @@ class Usuario extends Model {
     }
 
     public function procurarPor(){
-        $query = "select id, nome, email from usuarios where nome like :nome";
+        $query = "select id, nome, email from usuarios where nome like :nome and id != :id_usuario";
         $stmt = $this->db->prepare($query);
         $stmt->bindValue(':nome', '%'.$this->__get('nome').'%');
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
         $stmt->execute();
         $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -84,12 +85,80 @@ class Usuario extends Model {
     }
 
     public function listarTodos(){
-        $query = "select id, nome, email from usuarios";
+        $query = "
+                select 
+                       u.id, u.nome, u.email,
+                       (
+                           select 
+                                  count(*) 
+                           from  
+                                usuarios_seguidores as us 
+                           where 
+                                 us.id_usuario = :id_usuario
+                            and
+                                us.id_usuario_seguindo = u.id 
+                           ) as seguindo
+                from 
+                     usuarios as u
+                where 
+                      u.id != :id_usuario";
         $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
         $stmt->execute();
         $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
         return $result;
+    }
+
+    public function seguindo($id_usuario_seguindo){
+        $query = "
+                select 
+                    id_usuario, id_usuario_seguindo 
+                from 
+                    usuarios_seguidores 
+                where 
+                    id_usuario = :id_usuario and id_usuario_seguindo = :id_usuario_seguindo";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->bindValue(':id_usuario_seguindo', $id_usuario_seguindo);
+        $stmt->execute();
+
+        $result = $stmt->rowCount();
+
+        return $result;
+    }
+
+
+    public function seguir($id_usuario_seguindo){
+        $query = "
+                insert into 
+                    usuarios_seguidores(id_usuario, id_usuario_seguindo) 
+                values(:id_usuario, :id_usuario_seguindo)";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->bindValue(':id_usuario_seguindo', $id_usuario_seguindo);
+        $result = $stmt->execute();
+
+        return $result;
+
+    }
+
+    public function deixarDeSeguir($id_usuario_seguindo){
+        $query = "
+                delete from 
+                    usuarios_seguidores
+                where
+                    id_usuario = :id_usuario and id_usuario_seguindo = :id_usuario_seguindo 
+                ";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->bindValue(':id_usuario_seguindo', $id_usuario_seguindo);
+        $result = $stmt->execute();
+
+        return $result;
+
     }
 
 
