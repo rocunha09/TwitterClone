@@ -44,6 +44,17 @@ class Tweet extends Model {
                         (t.id_usuario = u.id)
                 where 
                         t.id_usuario = :id_usuario
+                or 
+                        t.id_usuario            
+                in 
+                        (
+                            select 
+                                id_usuario_seguindo
+                            from
+                                usuarios_seguidores 
+                            where 
+                                id_usuario = :id_usuario
+                        )         
                 order by
                          t.data desc 
                 
@@ -53,6 +64,23 @@ class Tweet extends Model {
         $stmt->execute();
         $result = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         return $result;
+    }
+
+    public function excluir(){
+        $query = "
+                delete from 
+                    tweets
+                where
+                    id = :id and id_usuario = :id_usuario  
+                ";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id', $this->__get('id'));
+        $stmt->bindValue(':id_usuario', $this->__get('id_usuario'));
+        $result = $stmt->execute();
+
+        return $result;
+
     }
 
 }

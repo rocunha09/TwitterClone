@@ -48,6 +48,12 @@ class Route extends  Bootstrap {
             'action' => 'tweet'
         );
 
+        $routes['excluir_tweet'] = array(
+            'route' => '/excluir_tweet',
+            'controller' => 'AppController',
+            'action' => 'excluirTweet'
+        );
+
         $routes['quem_seguir'] = array(
             'route' => '/quem_seguir',
             'controller' => 'AppController',
