@@ -161,5 +161,72 @@ class Usuario extends Model {
 
     }
 
+    public function infoUsuario(){
+        $query = "
+                select 
+                    id, nome, email
+                from 
+                    usuarios 
+                where 
+                    id = :id_usuario";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->execute();
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        return $result;
+
+    }
+
+    public function totTweets(){
+        $query = "
+                select 
+                    tweet
+                from 
+                    tweets 
+                where 
+                    id_usuario = :id_usuario";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->execute();
+        $result = $stmt->rowcount();
+
+        return $result;
+    }
+
+    public function totSeguindo(){
+        $query = "
+                select 
+                    *
+                from 
+                    usuarios_seguidores 
+                where 
+                    id_usuario = :id_usuario";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->execute();
+        $result = $stmt->rowcount();
+
+        return $result;
+
+    }
+
+    public function totSeguidores(){
+        $query = "
+                select 
+                    *
+                from 
+                    usuarios_seguidores 
+                where 
+                    id_usuario_seguindo = :id_usuario";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindValue(':id_usuario', $this->__get('id'));
+        $stmt->execute();
+        $result = $stmt->rowcount();
+
+        return $result;
+
+    }
+
 
 }

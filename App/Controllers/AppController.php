@@ -25,7 +25,18 @@ class AppController extends Action {
         $tweet = Container::getModel('Tweet');
         $tweet->__set('id_usuario', $_SESSION['id']);
 
+        $usuario = Container::getModel('Usuario');
+        $usuario->__set('id', $_SESSION['id']);
+
         $this->view->tweets = $tweet->listar();
+
+        $infoUsuario = $usuario->infoUsuario();
+
+        $this->view->nomeUsuario = $infoUsuario['nome'];
+        $this->view->totTweets = $usuario->totTweets();
+        $this->view->totSeguindo = $usuario->totSeguindo();
+        $this->view->totSeguidores = $usuario->totSeguidores();
+
         $this->render('timeline');
 
     }
