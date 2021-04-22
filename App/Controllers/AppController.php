@@ -28,10 +28,24 @@ class AppController extends Action {
         $usuario = Container::getModel('Usuario');
         $usuario->__set('id', $_SESSION['id']);
 
-        $this->view->tweets = $tweet->listar();
+        //paginação
+        $total_registros_pagina = 10;
+        $pagina = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
+        $deslocamento = ($pagina -1) * $total_registros_pagina;
+        $totTweets = $tweet->totTweets();
+        $totPaginas = ceil($totTweets / $total_registros_pagina);
 
+        //busca informações do usuário
         $infoUsuario = $usuario->infoUsuario();
 
+        //dados para paginação
+        $this->view->paginaAtiva = $pagina;
+        $this->view->totPaginas = $totPaginas;
+
+        //tweets que serão exibidos na timeline
+        $this->view->tweets = $tweet->listar($total_registros_pagina, $deslocamento);
+
+        //dados do usuário para exibir no peril
         $this->view->nomeUsuario = $infoUsuario['nome'];
         $this->view->totTweets = $usuario->totTweets();
         $this->view->totSeguindo = $usuario->totSeguindo();
@@ -98,6 +112,16 @@ class AppController extends Action {
 
         }
 
+        //busca informações do usuário
+        $infoUsuario = $usuario->infoUsuario();
+
+        //dados do usuário para exibir no peril
+        $this->view->nomeUsuario = $infoUsuario['nome'];
+        $this->view->totTweets = $usuario->totTweets();
+        $this->view->totSeguindo = $usuario->totSeguindo();
+        $this->view->totSeguidores = $usuario->totSeguidores();
+
+        //listagem de usuários que será exibida
         $this->view->usuariosEncontrados = $usuariosEncontrados;
 
         $this->render('quemSeguir');
